@@ -24,8 +24,18 @@ class ApiClient
 	function exec(){
 		$resp = $this->conn->request('POST', 'http://zorango-api.com/v1', [
 			  'form_params' => $this->getParams()
-			])->getBody()->getContents();
-		return json_decode($resp);
+			]);
+
+		$contents = $resp->getBody()->getContents();
+
+		$parsed = json_decode($contents);
+
+		if(!$parsed)
+			throw new Exception('Unable to parse json response > '.$contents);
+			
+		 return $parsed;
+			
+
 	}
    
 
